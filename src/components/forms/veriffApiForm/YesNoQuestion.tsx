@@ -1,12 +1,13 @@
 import { Card, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material"
-import { Question, YesNo } from "./question"
+import { YesNo } from "./question"
 
-interface Props extends Question {
-  onChange: (newValue: YesNo) => void
+interface Props {
+  description: string
+  onChange: (value: YesNo) => void
   value: YesNo | undefined
 }
 
-export const FormYesNoQuestion = ({ description, onChange, value }: Props) => {
+export const YesNoQuestion = ({ description, onChange, value }: Props) => {
   return (
     <>
       <Card sx={{ p: 2 }}>
