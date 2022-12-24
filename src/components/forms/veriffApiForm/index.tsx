@@ -2,7 +2,6 @@
 import { Button, Stack } from "@mui/material"
 import { Form, Formik } from "formik"
 import _ from "lodash"
-import { useKeyPress } from "src/hooks/useKeyPress"
 import * as yup from "yup"
 import { Question, YesNo } from "./question"
 import { QuestionsField } from "./QuestionsField"
@@ -47,15 +46,6 @@ export const VeriffApiForm = () => {
     )
   }
 
-  const handleKeyPress = ({ key }: KeyboardEvent) => {
-    switch (key) {
-      case "ArrowUp":
-        console.log("Going up!")
-    }
-  }
-
-  useKeyPress(["ArrowUp", "ArrowDown"], handleKeyPress)
-
   return (
     <>
       <Formik
@@ -79,11 +69,16 @@ export const VeriffApiForm = () => {
             )
         })}
       >
-        {({ submitForm, isSubmitting, isValid }) => (
+        {({ submitForm, isSubmitting, isValid, values }) => (
           <Form>
             <Stack direction="column" gap={1}>
               <Stack direction="column" gap={1}>
-                <QuestionsField questions={QUESTIONS} />
+                <QuestionsField
+                  questions={_.takeWhile(
+                    QUESTIONS,
+                    (_, index) => values.results[index - 1]?.result === YesNo.YES || index === 0
+                  )}
+                />
               </Stack>
 
               <Button variant="contained" onClick={submitForm} disabled={isSubmitting || !isValid}>
