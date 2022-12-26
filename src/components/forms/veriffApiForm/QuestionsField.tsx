@@ -2,7 +2,7 @@ import { useFormikContext } from "formik"
 import { useState } from "react"
 import { useKeyPress } from "src/hooks/useKeyPress"
 import { FormikResult } from "."
-import { Question, YesNo } from "./question"
+import { Question, YesNo } from "../../../services/veriff/type/question"
 import { YesNoQuestion } from "./YesNoQuestion"
 
 interface Props {

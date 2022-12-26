@@ -1,5 +1,5 @@
 import { Card, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material"
-import { YesNo } from "./question"
+import { YesNo } from "../../../services/veriff/type/question"
 
 interface Props {
   description: string
