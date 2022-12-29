@@ -1,5 +1,4 @@
-import { Result } from "../type"
-import { Question } from "../type/question"
+import { Question, Result } from "../type/question"
 
 export const fetchChecks = async (): Promise<Question[]> => {
   return new Promise((resolve, reject) =>

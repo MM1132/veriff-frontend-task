@@ -1,15 +1,15 @@
 import { useFormikContext } from "formik"
 import { useState } from "react"
+import { YesNoQuestion } from "src/components/forms/veriffApiForm/YesNoQuestion"
 import { useKeyPress } from "src/hooks/useKeyPress"
+import { Question, YesNo } from "src/services/veriff/type/question"
 import { FormikResult } from "."
-import { Question, YesNo } from "../../../services/veriff/type/question"
-import { YesNoQuestion } from "./YesNoQuestion"
 
-interface Props {
+export interface QuestionsFieldProps {
   questions: Question[]
 }
 
-export const QuestionsField = ({ questions }: Props) => {
+export const QuestionsField = ({ questions }: QuestionsFieldProps) => {
   const [selected, setSelected] = useState<string>()
 
   const {

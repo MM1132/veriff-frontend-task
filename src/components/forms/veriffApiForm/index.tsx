@@ -6,11 +6,10 @@ import { Form, Formik } from "formik"
 import _ from "lodash"
 import { useRouter } from "next/navigation"
 import { useCallback, useState } from "react"
+import { QuestionsField } from "src/components/forms/veriffApiForm/QuestionsField"
 import { fetchChecks, submitCheckResults } from "src/services/veriff/lib/veriffService"
-import { Result } from "src/services/veriff/type"
+import { Question, Result, YesNo } from "src/services/veriff/type/question"
 import * as yup from "yup"
-import { Question, YesNo } from "../../../services/veriff/type/question"
-import { QuestionsField } from "./QuestionsField"
 
 export interface FormikResult {
   results: Result[]

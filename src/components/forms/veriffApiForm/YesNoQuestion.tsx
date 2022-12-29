@@ -1,14 +1,14 @@
 import { Card, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material"
 import { YesNo } from "../../../services/veriff/type/question"
 
-interface Props {
+export interface YesNoQuestionProps {
   description: string
   onChange: (value: YesNo) => void
   value: YesNo | undefined
   selected: boolean
 }
 
-export const YesNoQuestion = ({ description, onChange, value, selected }: Props) => {
+export const YesNoQuestion = ({ description, onChange, value, selected }: YesNoQuestionProps) => {
   return (
     <>
       <Card sx={{ p: 2, bgcolor: selected ? "lightgray" : "default" }}>
