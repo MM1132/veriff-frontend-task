@@ -14,8 +14,12 @@ export default function Page() {
     <>
       <Card sx={{ m: 2 }}>
         <Stack sx={{ p: 2 }} gap={2} direction="column" alignItems="center">
-          <Typography variant="h3">You made it!</Typography>
-          <Button variant="contained" onClick={clickHandler}>
+          <Card sx={{ p: 3 }}>
+            <Typography sx={{ fontStyle: "italic" }} variant="h3">
+              You made it! :)
+            </Typography>
+          </Card>
+          <Button size="large" variant="contained" onClick={clickHandler}>
             Fill the amazing form again
           </Button>
         </Stack>

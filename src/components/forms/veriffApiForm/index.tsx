@@ -1,9 +1,12 @@
 "use client"
-import { Button, LinearProgress, Stack } from "@mui/material"
+import CachedIcon from "@mui/icons-material/Cached"
+import EastIcon from "@mui/icons-material/East"
+import { Button, Grid, LinearProgress, Stack } from "@mui/material"
 import { Form, Formik } from "formik"
 import _ from "lodash"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useCallback, useState } from "react"
+import { fetchChecks, submitCheckResults } from "src/services/veriff/lib/veriffService"
 import { Result } from "src/services/veriff/type"
 import * as yup from "yup"
 import { Question, YesNo } from "../../../services/veriff/type/question"
@@ -17,29 +20,37 @@ export const VeriffApiForm = () => {
   const router = useRouter()
   const [questions, setQuestions] = useState<Question[]>([])
 
-  /* useEffect(() => {
+  const [loading, setLoading] = useState<boolean>(false)
+  const getAndSetQuestions = useCallback(() => {
+    setLoading(true)
     fetchChecks()
       .then((data) => {
-        console.log("questions", data)
         setQuestions(data)
+        setLoading(false)
       })
-      .catch((data) => {
-        console.error(data)
+      .catch(() => {
+        setLoading(false)
       })
-  }, [setQuestions]) */
+  }, [setQuestions])
 
-  const handleSubmit = ({ results }: FormikResult) => {
-    //TODO Use the endpoint to submit the form!
-    console.log(
-      "resultsLodash",
-      _.takeWhile(results, (_, index) => results[index - 1]?.result === YesNo.YES || index === 0)
-    )
-    router.push("/submitted")
-  }
+  const trySubmittingFormResults = useCallback(
+    (results: Result[]) => {
+      setLoading(true)
+      submitCheckResults(results)
+        .then(() => {
+          setLoading(false)
+          router.push("/submitted")
+        })
+        .catch(() => {
+          setLoading(false)
+        })
+    },
+    [router, setLoading]
+  )
 
   return (
     <>
-      {questions.length > 0 ? (
+      {questions.length > 0 && (
         <>
           <Formik
             validateOnMount
@@ -49,7 +60,13 @@ export const VeriffApiForm = () => {
                 result: undefined
               }))
             }}
-            onSubmit={handleSubmit}
+            onSubmit={({ results }) => {
+              const filteredValues = _.takeWhile(
+                results,
+                (_, index) => results[index - 1]?.result === YesNo.YES || index === 0
+              )
+              trySubmittingFormResults(filteredValues)
+            }}
             validationSchema={yup.object({
               results: yup
                 .array()
@@ -62,7 +79,7 @@ export const VeriffApiForm = () => {
                 )
             })}
           >
-            {({ submitForm, isSubmitting, isValid, values }) => (
+            {({ submitForm, isValid, values }) => (
               <Form>
                 <Stack direction="column" gap={1}>
                   <Stack direction="column" gap={1}>
@@ -77,17 +94,30 @@ export const VeriffApiForm = () => {
                   <Button
                     variant="contained"
                     onClick={submitForm}
-                    disabled={isSubmitting || !isValid}
+                    disabled={loading || !isValid}
+                    endIcon={<EastIcon />}
+                    size="large"
                   >
-                    Submit
+                    Try submitting
                   </Button>
                 </Stack>
               </Form>
             )}
           </Formik>
         </>
-      ) : (
-        <LinearProgress />
+      )}
+      {loading && <LinearProgress />}
+      {!loading && questions.length === 0 && (
+        <Grid container justifyContent="center">
+          <Button
+            variant="contained"
+            onClick={getAndSetQuestions}
+            startIcon={<CachedIcon />}
+            size="large"
+          >
+            Try loading the questions!
+          </Button>
+        </Grid>
       )}
     </>
   )
